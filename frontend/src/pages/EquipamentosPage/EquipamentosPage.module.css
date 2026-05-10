@@ -1,0 +1,6 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jq-sp-4);
+  margin-top: var(--jq-sp-6);
+}

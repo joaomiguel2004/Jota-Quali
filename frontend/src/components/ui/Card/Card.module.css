@@ -1,0 +1,28 @@
+.card {
+  background: var(--jq-white);
+  border: 1px solid var(--jq-border);
+  border-radius: var(--jq-radius-lg);
+  box-shadow: var(--jq-shadow-xs);
+}
+.padded {
+  padding: var(--jq-sp-6);
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--jq-sp-4) var(--jq-sp-6);
+  border-bottom: 1px solid var(--jq-border);
+}
+.title {
+  font-size: var(--jq-fs-lg);
+  font-weight: var(--jq-fw-semibold);
+  color: var(--jq-text-strong);
+}
+.subtitle {
+  font-size: var(--jq-fs-sm);
+  color: var(--jq-text-muted);
+}
+.body {
+  padding: var(--jq-sp-6);
+}

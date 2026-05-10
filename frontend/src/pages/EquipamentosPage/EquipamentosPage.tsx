@@ -1,0 +1,184 @@
+import { useState } from "react";
+import { Plus, Wrench } from "lucide-react";
+import { toast } from "sonner";
+import { PageHeader } from "@/components/layout/PageHeader/PageHeader";
+import { EmptyState } from "@/components/feedback/EmptyState/EmptyState";
+import { Button } from "@/components/ui/Button/Button";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useEquipamentos } from "@/features/equipamentos/hooks/useEquipamentos";
+import { EquipamentosToolbar } from "@/features/equipamentos/components/EquipamentosToolbar/EquipamentosToolbar";
+import { EquipamentosTable } from "@/features/equipamentos/components/EquipamentosTable/EquipamentosTable";
+import { Pagination } from "@/features/equipamentos/components/Pagination/Pagination";
+import { EquipamentoFormDialog } from "@/features/equipamentos/components/EquipamentoFormDialog/EquipamentoFormDialog";
+import { ConfirmDialog } from "@/features/equipamentos/components/ConfirmDialog/ConfirmDialog";
+import type {
+  Equipamento,
+  EquipamentoInput,
+} from "@/features/equipamentos/types";
+import styles from "./EquipamentosPage.module.css";
+
+export default function EquipamentosPage() {
+  useDocumentTitle("Equipamentos");
+
+  const {
+    items,
+    paginated,
+    total,
+    page,
+    totalPages,
+    pageSize,
+    setPage,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    create,
+    update,
+    remove,
+  } = useEquipamentos();
+
+  const [formOpen, setFormOpen] = useState(false);
+  const [editing, setEditing] = useState<Equipamento | null>(null);
+  const [toDelete, setToDelete] = useState<Equipamento | null>(null);
+
+  const hasAnyItems = items.length > 0;
+  const hasFilteredResults = total > 0;
+  const isFiltering =
+    search.trim().length > 0 || statusFilter !== "todos";
+
+  function openCreate() {
+    setEditing(null);
+    setFormOpen(true);
+  }
+  function openEdit(eq: Equipamento) {
+    setEditing(eq);
+    setFormOpen(true);
+  }
+
+  async function handleSubmit(input: EquipamentoInput) {
+    try {
+      if (editing) {
+        update(editing.id, input);
+        toast.success("Equipamento atualizado com sucesso.");
+      } else {
+        create(input);
+        toast.success("Equipamento cadastrado com sucesso.");
+      }
+      setFormOpen(false);
+      setEditing(null);
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : "Erro ao salvar equipamento.";
+      toast.error(msg);
+    }
+  }
+
+  function handleConfirmDelete() {
+    if (!toDelete) return;
+    try {
+      remove(toDelete.id);
+      toast.success(`Equipamento ${toDelete.tag} removido.`);
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : "Erro ao remover equipamento.";
+      toast.error(msg);
+    } finally {
+      setToDelete(null);
+    }
+  }
+
+  return (
+    <>
+      <PageHeader
+        eyebrow="Operação"
+        title="Equipamentos"
+        subtitle="Cadastro, identificação e controle do parque de equipamentos da empresa."
+        actions={
+          <Button variant="primary" leftIcon={<Plus size={16} />} onClick={openCreate}>
+            Novo equipamento
+          </Button>
+        }
+      />
+
+      {!hasAnyItems ? (
+        <EmptyState
+          icon={Wrench}
+          title="Nenhum equipamento cadastrado"
+          description="Cadastre o primeiro equipamento para começar a controlar tags, localizações e calibrações."
+          actions={
+            <Button
+              variant="primary"
+              leftIcon={<Plus size={16} />}
+              onClick={openCreate}
+            >
+              Cadastrar equipamento
+            </Button>
+          }
+        />
+      ) : (
+        <div className={styles.section}>
+          <EquipamentosToolbar
+            search={search}
+            onSearchChange={setSearch}
+            status={statusFilter}
+            onStatusChange={setStatusFilter}
+          />
+
+          {hasFilteredResults ? (
+            <>
+              <EquipamentosTable
+                items={paginated}
+                onEdit={openEdit}
+                onDelete={(eq) => setToDelete(eq)}
+              />
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                total={total}
+                pageSize={pageSize}
+                onChange={setPage}
+              />
+            </>
+          ) : (
+            <EmptyState
+              icon={Wrench}
+              title={
+                isFiltering
+                  ? "Nenhum resultado encontrado"
+                  : "Nenhum equipamento cadastrado"
+              }
+              description={
+                isFiltering
+                  ? "Ajuste a busca ou os filtros para visualizar outros equipamentos."
+                  : "Cadastre o primeiro equipamento para começar."
+              }
+            />
+          )}
+        </div>
+      )}
+
+      <EquipamentoFormDialog
+        open={formOpen}
+        initial={editing}
+        onClose={() => {
+          setFormOpen(false);
+          setEditing(null);
+        }}
+        onSubmit={handleSubmit}
+      />
+
+      <ConfirmDialog
+        open={!!toDelete}
+        title="Excluir equipamento"
+        message={
+          toDelete
+            ? `Tem certeza que deseja excluir o equipamento "${toDelete.tag} — ${toDelete.nome}"? Essa ação não poderá ser desfeita.`
+            : ""
+        }
+        confirmLabel="Excluir"
+        onConfirm={handleConfirmDelete}
+        onClose={() => setToDelete(null)}
+      />
+    </>
+  );
+}

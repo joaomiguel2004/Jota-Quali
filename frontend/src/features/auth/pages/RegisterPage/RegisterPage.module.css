@@ -1,0 +1,109 @@
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--jq-sp-4);
+}
+@media (min-width: 520px) {
+  .grid2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.strength {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jq-sp-2);
+  margin-top: calc(var(--jq-sp-1) * -1);
+}
+.strengthBars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.bar {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--jq-border-strong);
+  transition: background var(--jq-dur-fast) var(--jq-ease);
+}
+.bar.lvl1 { background: #dc2626; }
+.bar.lvl2 { background: #f59e0b; }
+.bar.lvl3 { background: #eab308; }
+.bar.lvl4 { background: #16a34a; }
+
+.strengthMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--jq-fs-xs);
+  color: var(--jq-text-muted);
+}
+.strengthLabel {
+  font-weight: var(--jq-fw-medium);
+  color: var(--jq-text-strong);
+}
+
+.checks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px var(--jq-sp-3);
+}
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--jq-fs-xs);
+  color: var(--jq-text-muted);
+}
+.checkOn {
+  color: #16a34a;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--jq-border-strong);
+}
+.checkOn .dot {
+  background: #16a34a;
+}
+
+.terms {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--jq-sp-2);
+  font-size: var(--jq-fs-sm);
+  color: var(--jq-text-muted);
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.5;
+}
+.terms input {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  accent-color: var(--jq-primary);
+  flex-shrink: 0;
+}
+.terms a {
+  color: var(--jq-primary);
+  font-weight: var(--jq-fw-medium);
+  text-decoration: none;
+}
+.terms a:hover { text-decoration: underline; }
+
+.termsError {
+  font-size: var(--jq-fs-xs);
+  color: var(--jq-danger);
+  font-weight: var(--jq-fw-medium);
+  margin-top: calc(var(--jq-sp-2) * -1);
+}
+
+.signinHint {
+  text-align: center;
+  font-size: var(--jq-fs-sm);
+  color: var(--jq-text-muted);
+  margin: 0;
+}
