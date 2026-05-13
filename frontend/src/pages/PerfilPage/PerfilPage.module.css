@@ -1,0 +1,71 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jq-sp-6);
+  max-width: 800px;
+}
+
+.card {
+  background: var(--jq-white);
+}
+
+.formGrid {
+  display: grid;
+  gap: var(--jq-sp-4);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--jq-sp-4);
+}
+
+@media (min-width: 600px) {
+  .formRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--jq-sp-4);
+}
+
+.avatarSection {
+  display: flex;
+  align-items: center;
+  gap: var(--jq-sp-4);
+  margin-bottom: var(--jq-sp-6);
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--jq-primary);
+  color: var(--jq-white);
+  font-size: 2rem;
+  font-weight: var(--jq-fw-semibold);
+  letter-spacing: 0.05em;
+}
+
+.avatarInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.avatarName {
+  font-size: var(--jq-fs-lg);
+  font-weight: var(--jq-fw-semibold);
+  color: var(--jq-text-strong);
+}
+
+.avatarRole {
+  font-size: var(--jq-fs-sm);
+  color: var(--jq-text-muted);
+  text-transform: capitalize;
+}

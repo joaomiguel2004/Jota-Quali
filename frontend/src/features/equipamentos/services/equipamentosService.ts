@@ -11,6 +11,8 @@ const SEED: Equipamento[] = [
     ultimaCalibracao: "2025-03-12",
     localizacao: "Laboratório 1",
     status: "ativo",
+    padrao: "RBC 001/25",
+    laudoAssinado: true,
     createdAt: "2025-01-10T09:00:00.000Z",
   },
   {
@@ -20,6 +22,8 @@ const SEED: Equipamento[] = [
     ultimaCalibracao: "2025-04-02",
     localizacao: "Metrologia",
     status: "ativo",
+    padrao: "ISO 9001",
+    laudoAssinado: true,
     createdAt: "2025-01-18T09:00:00.000Z",
   },
   {
@@ -29,6 +33,8 @@ const SEED: Equipamento[] = [
     ultimaCalibracao: "2024-11-20",
     localizacao: "Laboratório 2",
     status: "manutencao",
+    padrao: "NBR 17025",
+    laudoAssinado: false,
     createdAt: "2025-02-02T09:00:00.000Z",
   },
   {
@@ -38,6 +44,8 @@ const SEED: Equipamento[] = [
     ultimaCalibracao: "2025-02-08",
     localizacao: "Manutenção elétrica",
     status: "ativo",
+    padrao: "RBC 004/24",
+    laudoAssinado: true,
     createdAt: "2025-02-12T09:00:00.000Z",
   },
   {
@@ -56,6 +64,8 @@ const SEED: Equipamento[] = [
     ultimaCalibracao: "2025-01-22",
     localizacao: "Metrologia",
     status: "ativo",
+    padrao: "RBC 006/25",
+    laudoAssinado: true,
     createdAt: "2025-03-10T09:00:00.000Z",
   },
   {
@@ -74,6 +84,8 @@ const SEED: Equipamento[] = [
     ultimaCalibracao: "2024-12-10",
     localizacao: "Sala de pressão",
     status: "manutencao",
+    padrao: "NBR 17025",
+    laudoAssinado: false,
     createdAt: "2025-03-20T09:00:00.000Z",
   },
   {
@@ -92,6 +104,8 @@ const SEED: Equipamento[] = [
     ultimaCalibracao: "2025-02-25",
     localizacao: "Laboratório 2",
     status: "ativo",
+    padrao: "RBC 010/25",
+    laudoAssinado: true,
     createdAt: "2025-03-25T09:00:00.000Z",
   },
   {
@@ -119,6 +133,8 @@ const SEED: Equipamento[] = [
     ultimaCalibracao: "2025-03-30",
     localizacao: "Metalurgia",
     status: "ativo",
+    padrao: "ISO 9001",
+    laudoAssinado: true,
     createdAt: "2025-04-10T09:00:00.000Z",
   },
   {
@@ -137,6 +153,8 @@ const SEED: Equipamento[] = [
     ultimaCalibracao: "2025-04-20",
     localizacao: "Controle de qualidade",
     status: "ativo",
+    padrao: "RBC 015/25",
+    laudoAssinado: true,
     createdAt: "2025-04-20T09:00:00.000Z",
   },
 ];

@@ -7,6 +7,8 @@ export interface Equipamento {
   ultimaCalibracao: string | null; // ISO date (YYYY-MM-DD)
   localizacao: string;
   status: StatusEquipamento;
+  padrao?: string;
+  laudoAssinado?: boolean;
   createdAt: string;
 }
 
