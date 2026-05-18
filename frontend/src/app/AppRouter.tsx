@@ -32,6 +32,7 @@ const UsuariosPage = lazy(() => import("@/pages/UsuariosPage/UsuariosPage"));
 const ConfiguracoesPage = lazy(
   () => import("@/pages/ConfiguracoesPage/ConfiguracoesPage")
 );
+const PerfilPage = lazy(() => import("@/pages/PerfilPage/PerfilPage"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
 function PageFallback() {
@@ -82,6 +83,7 @@ export function AppRouter() {
                 />
                 <Route path={ROUTES.usuarios} element={<UsuariosPage />} />
                 <Route path={ROUTES.configuracoes} element={<ConfiguracoesPage />} />
+                <Route path={ROUTES.perfil} element={<PerfilPage />} />
               </Route>
             </Route>
 

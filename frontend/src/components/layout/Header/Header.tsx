@@ -89,7 +89,12 @@ export function Header({ onToggleSidebar }: HeaderProps) {
               <div className={styles.menuName}>{user?.name}</div>
               <div className={styles.menuEmail}>{user?.email}</div>
             </div>
-            <button className={styles.menuItem} role="menuitem" type="button">
+            <button
+              className={styles.menuItem}
+              role="menuitem"
+              type="button"
+              onClick={() => navigate(ROUTES.perfil)}
+            >
               <UserRound size={15} /> Meu perfil
             </button>
             <button
