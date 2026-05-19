@@ -1,4 +1,4 @@
-export type StatusEquipamento = "ativo" | "manutencao" | "inativo";
+export type StatusEquipamento = "ativo" | "manutencao" | "inativo" | "vencendo";
 
 export interface Equipamento {
   id: string;
@@ -18,4 +18,5 @@ export const STATUS_LABEL: Record<StatusEquipamento, string> = {
   ativo: "Ativo",
   manutencao: "Em manutenção",
   inativo: "Inativo",
+  vencendo: "Próx. Vencimento",
 };

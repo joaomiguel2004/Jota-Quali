@@ -1,14 +1,21 @@
 import React, { useState } from "react";
-import { ChevronRight, Pencil, Trash2, CheckCircle2, XCircle } from "lucide-react";
+import { ChevronRight, Pencil, Trash2, CheckCircle2, XCircle, X, Wrench, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import type { Equipamento } from "../../types";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
 import styles from "./EquipamentosTable.module.css";
 import { cn } from "@/lib/cn";
 
+import type { SortField, SortDirection } from "../../hooks/useEquipamentos";
+
 interface Props {
   items: Equipamento[];
   onEdit: (eq: Equipamento) => void;
   onDelete: (eq: Equipamento) => void;
+  onCalibrate?: (eq: Equipamento) => void;
+  mode?: "equipamentos" | "calibracao";
+  sortField?: SortField;
+  sortDirection?: SortDirection;
+  onSort?: (field: SortField) => void;
 }
 
 function formatDate(iso: string | null): string {
@@ -18,8 +25,9 @@ function formatDate(iso: string | null): string {
   return `${d}/${m}/${y}`;
 }
 
-export function EquipamentosTable({ items, onEdit, onDelete }: Props) {
+export function EquipamentosTable({ items, onEdit, onDelete, onCalibrate, mode = "equipamentos", sortField, sortDirection, onSort }: Props) {
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [popup, setPopup] = useState<{ isOpen: boolean; type: 'padrao' | 'laudo'; title: string; content: string; hasFile: boolean } | null>(null);
 
   const toggleRow = (id: string) => {
     const newExpanded = new Set(expandedRows);
@@ -31,17 +39,35 @@ export function EquipamentosTable({ items, onEdit, onDelete }: Props) {
     setExpandedRows(newExpanded);
   };
 
+  const renderSortIcon = (field: SortField) => {
+    if (sortField !== field) return <ArrowUpDown size={14} className={styles.sortIconIdle} />;
+    return sortDirection === "asc" ? <ArrowUp size={14} className={styles.sortIconActive} /> : <ArrowDown size={14} className={styles.sortIconActive} />;
+  };
+
+  const renderSortHeader = (label: string, field: SortField) => (
+    <th 
+      className={styles.sortableHeader} 
+      onClick={() => onSort?.(field)}
+      style={{ cursor: onSort ? 'pointer' : 'default' }}
+    >
+      <div className={styles.headerContent}>
+        {label}
+        {onSort && renderSortIcon(field)}
+      </div>
+    </th>
+  );
+
   return (
     <div className={styles.wrap}>
       <table className={styles.table}>
         <thead>
           <tr>
             <th style={{ width: "40px" }} aria-label="Expandir"></th>
-            <th className={styles.tag}>Tag</th>
-            <th>Nome</th>
-            <th>Última calibração</th>
-            <th>Localização</th>
-            <th>Status</th>
+            {renderSortHeader("Tag", "tag")}
+            {renderSortHeader("Nome", "nome")}
+            {renderSortHeader("Última calibração", "ultimaCalibracao")}
+            {renderSortHeader("Localização", "localizacao")}
+            {renderSortHeader("Status", "status")}
             <th className={styles.actionsHead} aria-label="Ações" />
           </tr>
         </thead>
@@ -50,13 +76,20 @@ export function EquipamentosTable({ items, onEdit, onDelete }: Props) {
             const isExpanded = expandedRows.has(eq.id);
             return (
               <React.Fragment key={eq.id}>
-                <tr>
+                <tr
+                  className={styles.clickableRow}
+                  onClick={(e) => {
+                    if ((e.target as HTMLElement).closest('button')) return;
+                    toggleRow(eq.id);
+                  }}
+                >
                   <td>
                     <button
                       type="button"
                       className={cn(styles.expandBtn, isExpanded && styles.expanded)}
                       onClick={() => toggleRow(eq.id)}
                       aria-label={isExpanded ? "Recolher detalhes" : "Expandir detalhes"}
+                      tabIndex={-1}
                     >
                       <ChevronRight size={18} />
                     </button>
@@ -70,24 +103,47 @@ export function EquipamentosTable({ items, onEdit, onDelete }: Props) {
                   </td>
                   <td>
                     <div className={styles.actions}>
-                      <button
-                        type="button"
-                        className={styles.iconBtn}
-                        onClick={() => onEdit(eq)}
-                        aria-label={`Editar ${eq.tag}`}
-                        title="Editar"
-                      >
-                        <Pencil size={16} />
-                      </button>
-                      <button
-                        type="button"
-                        className={`${styles.iconBtn} ${styles.iconBtnDanger}`}
-                        onClick={() => onDelete(eq)}
-                        aria-label={`Excluir ${eq.tag}`}
-                        title="Excluir"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      {mode === "calibracao" ? (
+                        <button
+                          type="button"
+                          className={styles.iconBtn}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onCalibrate?.(eq);
+                          }}
+                          aria-label={`Iniciar calibração ${eq.tag}`}
+                          title="Iniciar calibração / Gerar Laudo"
+                        >
+                          <Wrench size={16} />
+                        </button>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            className={styles.iconBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onEdit(eq);
+                            }}
+                            aria-label={`Editar ${eq.tag}`}
+                            title="Editar"
+                          >
+                            <Pencil size={16} />
+                          </button>
+                          <button
+                            type="button"
+                            className={`${styles.iconBtn} ${styles.iconBtnDanger}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDelete(eq);
+                            }}
+                            aria-label={`Excluir ${eq.tag}`}
+                            title="Excluir"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -99,11 +155,34 @@ export function EquipamentosTable({ items, onEdit, onDelete }: Props) {
                           Detalhes do Equipamento: {eq.tag}
                         </div>
                         <div className={styles.expandedGrid}>
-                          <div className={styles.expandedItem}>
+                          <div 
+                            className={cn(styles.expandedItem, styles.clickableCard)}
+                            onClick={() => {
+                              const hasPadrao = !!eq.padrao && eq.padrao !== "Não definido";
+                              setPopup({
+                                isOpen: true,
+                                type: 'padrao',
+                                title: 'Padrão do Equipamento',
+                                content: hasPadrao ? `O equipamento possui padrão cadastrado: ${eq.padrao}` : 'Não há padrão cadastrado para este equipamento.',
+                                hasFile: hasPadrao
+                              });
+                            }}
+                          >
                             <span className={styles.expandedLabel}>Padrão do Equipamento</span>
                             <span className={styles.expandedValue}>{eq.padrao || "Não definido"}</span>
                           </div>
-                          <div className={styles.expandedItem}>
+                          <div 
+                            className={cn(styles.expandedItem, styles.clickableCard)}
+                            onClick={() => {
+                              setPopup({
+                                isOpen: true,
+                                type: 'laudo',
+                                title: 'Laudo Assinado',
+                                content: eq.laudoAssinado ? 'O equipamento possui laudo assinado.' : 'Não há laudo assinado para este equipamento.',
+                                hasFile: eq.laudoAssinado
+                              });
+                            }}
+                          >
                             <span className={styles.expandedLabel}>Laudo Assinado</span>
                             <span className={styles.expandedValue} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                               {eq.laudoAssinado ? (
@@ -127,6 +206,47 @@ export function EquipamentosTable({ items, onEdit, onDelete }: Props) {
           })}
         </tbody>
       </table>
+
+      {popup && popup.isOpen && (
+        <div className={styles.popupOverlay} onClick={() => setPopup(null)}>
+          <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.popupHeader}>
+              <h3 className={styles.popupTitle}>{popup.title}</h3>
+              <button type="button" className={styles.popupClose} onClick={() => setPopup(null)}>
+                <X size={20} />
+              </button>
+            </div>
+            <div className={styles.popupBody}>
+              <p className={styles.popupText}>{popup.content}</p>
+              {popup.hasFile && (
+                <div className={styles.fileContainer}>
+                  <div className={styles.pdfPreviewContainer}>
+                    <iframe 
+                      src="/exemplo.pdf#view=FitH" 
+                      title={`Visualização de ${popup.type}`}
+                      className={styles.pdfPreview}
+                    />
+                  </div>
+                  <div className={styles.fileActions}>
+                    <div className={styles.fileDetails}>
+                      <span className={styles.fileName}>arquivo_{popup.type}.pdf</span>
+                      <span className={styles.fileSize}>1.2 MB</span>
+                    </div>
+                    <a 
+                      href="/exemplo.pdf" 
+                      download={`arquivo_${popup.type}.pdf`}
+                      className={styles.downloadBtn}
+                      style={{ textDecoration: 'none', textAlign: 'center' }}
+                    >
+                      Baixar Arquivo
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
