@@ -56,12 +56,14 @@ export default function PerfilPage() {
                 {user?.avatarInitials ?? "JQ"}
               </div>
               <div className={styles.avatarInfo}>
-                <span className={styles.avatarName}>{user?.name ?? "Usuário"}</span>
-                <span className={styles.avatarRole}>{user?.role ?? "Visualizador"}</span>
-                <Button variant="secondary" size="sm" style={{ marginTop: "8px", alignSelf: "flex-start" }}>
-                  <Camera size={14} style={{ marginRight: "6px" }} />
-                  Alterar foto
-                </Button>
+                <div className={styles.avatarDetails}>
+                  <span className={styles.avatarName}>{user?.name ?? "Usuário"}</span>
+                  <span className={styles.avatarRole}>{user?.role ?? "Visualizador"}</span>
+                </div>
+                <button type="button" className={styles.editPhotoBtn}>
+                  <Camera size={16} />
+                  <span>Editar foto</span>
+                </button>
               </div>
             </div>
 

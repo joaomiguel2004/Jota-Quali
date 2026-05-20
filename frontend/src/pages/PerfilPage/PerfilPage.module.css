@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--jq-sp-6);
-  max-width: 800px;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .card {
@@ -35,8 +37,12 @@
 .avatarSection {
   display: flex;
   align-items: center;
-  gap: var(--jq-sp-4);
+  gap: var(--jq-sp-6);
   margin-bottom: var(--jq-sp-6);
+  padding: var(--jq-sp-5);
+  background: var(--jq-surface-1);
+  border-radius: var(--jq-radius-lg);
+  border: 1px solid var(--jq-border);
 }
 
 .avatar {
@@ -55,7 +61,34 @@
 
 .avatarInfo {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.avatarDetails {
+  display: flex;
   flex-direction: column;
+}
+
+.editPhotoBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--jq-sp-2);
+  background: var(--jq-primary);
+  color: var(--jq-text-onPrimary);
+  border: none;
+  border-radius: 9999px;
+  /* Pill shape */
+  padding: 0.5rem 1rem;
+  font-size: var(--jq-fs-sm);
+  font-weight: var(--jq-fw-medium);
+  cursor: pointer;
+  transition: background-color var(--jq-dur-fast) var(--jq-ease);
+}
+
+.editPhotoBtn:hover {
+  background-color: #343a40;
 }
 
 .avatarName {

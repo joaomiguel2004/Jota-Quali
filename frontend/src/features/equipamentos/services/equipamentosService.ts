@@ -157,6 +157,26 @@ const SEED: Equipamento[] = [
     laudoAssinado: true,
     createdAt: "2025-04-20T09:00:00.000Z",
   },
+  {
+    id: "seed-16",
+    tag: "EQ-016",
+    nome: "Balança de Precisão Ohaus",
+    ultimaCalibracao: "2024-05-15",
+    localizacao: "Laboratório 3",
+    status: "vencendo",
+    padrao: "RBC 016/24",
+    laudoAssinado: false,
+    createdAt: "2025-04-21T09:00:00.000Z",
+  },
+  {
+    id: "seed-17",
+    tag: "EQ-017",
+    nome: "Termômetro Digital Testo",
+    ultimaCalibracao: "2024-06-01",
+    localizacao: "Produção",
+    status: "vencendo",
+    createdAt: "2025-04-22T09:00:00.000Z",
+  },
 ];
 
 function uid(): string {
@@ -172,6 +192,22 @@ function readAll(): Equipamento[] {
     storage.set(KEY, SEED);
     return [...SEED];
   }
+
+  // Inject missing seeds if user has an old version of localStorage
+  let updated = false;
+  const newData = [...data];
+  for (const seedItem of SEED) {
+    if (!newData.some((e) => e.id === seedItem.id)) {
+      newData.push(seedItem);
+      updated = true;
+    }
+  }
+
+  if (updated) {
+    storage.set(KEY, newData);
+    return newData;
+  }
+
   return data;
 }
 

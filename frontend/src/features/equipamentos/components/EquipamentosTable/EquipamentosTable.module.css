@@ -22,6 +22,34 @@
   padding: var(--jq-sp-3) var(--jq-sp-4);
   border-bottom: 1px solid var(--jq-border);
 }
+
+.sortableHeader {
+  user-select: none;
+  transition: background-color var(--jq-dur-fast) var(--jq-ease);
+}
+.sortableHeader:hover {
+  background-color: var(--jq-surface-3, #f1f5f9);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: var(--jq-sp-2);
+}
+
+.sortIconIdle {
+  opacity: 0.3;
+  transition: opacity var(--jq-dur-fast) var(--jq-ease);
+}
+
+.sortableHeader:hover .sortIconIdle {
+  opacity: 0.8;
+}
+
+.sortIconActive {
+  color: var(--jq-primary);
+  opacity: 1;
+}
 .table tbody td {
   padding: var(--jq-sp-3) var(--jq-sp-4);
   border-bottom: 1px solid var(--jq-border);
@@ -144,4 +172,167 @@
   font-size: var(--jq-fs-sm);
   color: var(--jq-text-strong);
   font-weight: var(--jq-fw-medium);
+}
+
+.clickableRow {
+  cursor: pointer;
+}
+
+.clickableCard {
+  cursor: pointer;
+  padding: var(--jq-sp-2);
+  margin: calc(-1 * var(--jq-sp-2));
+  border-radius: var(--jq-radius-md);
+  transition: background-color var(--jq-dur-fast) var(--jq-ease);
+}
+.clickableCard:hover {
+  background-color: var(--jq-surface-2);
+}
+
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popupContent {
+  background: var(--jq-white);
+  border-radius: var(--jq-radius-lg);
+  padding: var(--jq-sp-6);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  animation: popupSlideIn 0.2s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.popupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--jq-sp-4);
+}
+
+.popupTitle {
+  font-size: var(--jq-fs-lg);
+  font-weight: var(--jq-fw-semibold);
+  color: var(--jq-text-strong);
+  margin: 0;
+}
+
+.popupClose {
+  background: transparent;
+  border: none;
+  color: var(--jq-text-muted);
+  cursor: pointer;
+  padding: var(--jq-sp-1);
+  border-radius: var(--jq-radius-sm);
+  transition: all var(--jq-dur-fast) var(--jq-ease);
+}
+.popupClose:hover {
+  background: var(--jq-surface-2);
+  color: var(--jq-danger);
+}
+
+.popupBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jq-sp-4);
+  flex: 1;
+  overflow: hidden;
+}
+
+.popupText {
+  font-size: var(--jq-fs-md);
+  color: var(--jq-text);
+  margin: 0;
+}
+
+.fileContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jq-sp-4);
+  background: var(--jq-surface-1);
+  border: 1px solid var(--jq-border);
+  border-radius: var(--jq-radius-md);
+  padding: var(--jq-sp-4);
+  flex: 1;
+  overflow: hidden;
+}
+
+.pdfPreviewContainer {
+  flex: 1;
+  min-height: 500px;
+  border: 1px solid var(--jq-border);
+  border-radius: var(--jq-radius-md);
+  overflow: hidden;
+  background: var(--jq-white);
+  display: flex;
+  flex-direction: column;
+}
+
+.pdfPreview {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.fileActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fileDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.fileName {
+  font-size: var(--jq-fs-sm);
+  font-weight: var(--jq-fw-medium);
+  color: var(--jq-text-strong);
+}
+
+.fileSize {
+  font-size: var(--jq-fs-xs);
+  color: var(--jq-text-muted);
+}
+
+.downloadBtn {
+  background: var(--jq-primary, #3b82f6);
+  color: var(--jq-white, #ffffff);
+  border: none;
+  padding: var(--jq-sp-2) var(--jq-sp-3);
+  border-radius: var(--jq-radius-md);
+  font-size: var(--jq-fs-sm);
+  font-weight: var(--jq-fw-medium);
+  cursor: pointer;
+  transition: filter var(--jq-dur-fast) var(--jq-ease);
+}
+.downloadBtn:hover {
+  filter: brightness(0.9);
 }

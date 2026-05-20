@@ -31,3 +31,9 @@
   background: var(--jq-muted);
   border-color: var(--jq-border);
 }
+
+.vencendo {
+  color: var(--jq-danger);
+  background: var(--jq-danger-soft);
+  border-color: rgba(220, 38, 38, 0.2);
+}

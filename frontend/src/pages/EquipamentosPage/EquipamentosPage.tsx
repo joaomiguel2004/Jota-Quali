@@ -32,6 +32,9 @@ export default function EquipamentosPage() {
     setSearch,
     statusFilter,
     setStatusFilter,
+    sortField,
+    sortDirection,
+    toggleSort,
     create,
     update,
     remove,
@@ -130,6 +133,9 @@ export default function EquipamentosPage() {
                 items={paginated}
                 onEdit={openEdit}
                 onDelete={(eq) => setToDelete(eq)}
+                sortField={sortField}
+                sortDirection={sortDirection}
+                onSort={toggleSort}
               />
               <Pagination
                 page={page}
