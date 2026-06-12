@@ -4,6 +4,7 @@ import type { Equipamento } from "../../types";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
 import styles from "./EquipamentosTable.module.css";
 import { cn } from "@/lib/cn";
+import { Button } from "@/components/ui/Button/Button";
 
 import type { SortField, SortDirection } from "../../hooks/useEquipamentos";
 
@@ -136,21 +137,34 @@ export function EquipamentosTable({ items, onEdit, onDelete, onCalibrate, onSign
                           <Wrench size={16} />
                         </button>
                       ) : mode === "laudos" ? (
-                        eq.statusLaudo === "aguardando_assinatura" && onSign && (
+                        <>
+                          {eq.statusLaudo === "aguardando_assinatura" && onSign && (
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onSign(eq);
+                              }}
+                              aria-label={`Assinar laudo ${eq.tag}`}
+                              title="Assinar com GOV.BR"
+                            >
+                              Assinar
+                            </Button>
+                          )}
                           <button
                             type="button"
-                            className={styles.iconBtn}
+                            className={`${styles.iconBtn} ${styles.iconBtnDanger}`}
                             onClick={(e) => {
                               e.stopPropagation();
-                              onSign(eq);
+                              onDelete(eq);
                             }}
-                            aria-label={`Assinar laudo ${eq.tag}`}
-                            title="Assinar com GOV.BR"
-                            style={{ backgroundColor: "var(--jq-primary)", color: "#fff", width: "auto", padding: "0 0.5rem", borderRadius: "4px", gap: "0.25rem" }}
+                            aria-label={`Remover laudo ${eq.tag}`}
+                            title="Remover"
                           >
-                            <CheckCircle2 size={14} /> Assinar
+                            <Trash2 size={16} />
                           </button>
-                        )
+                        </>
                       ) : (
                         <>
                           <button

@@ -7,7 +7,17 @@ import { Button } from "@/components/ui/Button/Button";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { useEquipamentos } from "@/features/equipamentos/hooks/useEquipamentos";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { storage } from "@/lib/storage";
 import styles from "./AssinaturaDigitalPage.module.css";
+
+interface Padrao {
+  id: string;
+  nome: string;
+  codigo: string;
+  equipamentos: string;
+  statusLaudo?: "aguardando_assinatura" | "assinado";
+  laudoAssinado?: boolean;
+}
 
 export default function AssinaturaDigitalPage() {
   useDocumentTitle("Assinatura Digital GOV.BR");
@@ -15,9 +25,17 @@ export default function AssinaturaDigitalPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { items, update } = useEquipamentos();
+  const [padroes, setPadroes] = useState<Padrao[]>(() => {
+    return storage.get<Padrao[]>("jq:padroes:v1") || [];
+  });
 
   const eqId = searchParams.get("eqId");
-  const equipamento = items.find((e) => e.id === eqId);
+  const isPadrao = eqId?.startsWith("padrao_");
+  const realId = isPadrao ? eqId?.replace("padrao_", "") : eqId;
+
+  const equipamento = items.find((e) => e.id === realId);
+  const padrao = padroes.find((p) => p.id === realId);
+  const target = isPadrao ? padrao : equipamento;
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -30,13 +48,13 @@ export default function AssinaturaDigitalPage() {
     }
   }, [user, navigate]);
 
-  if (!equipamento) {
+  if (!target) {
     return (
       <>
         <PageHeader eyebrow="Qualidade" title="Assinatura Digital" subtitle="Integração GOV.BR" />
         <div className={styles.section}>
           <div className={styles.card}>
-            <p>Nenhum equipamento selecionado para assinatura ou equipamento não encontrado.</p>
+            <p>Nenhum item selecionado para assinatura ou item não encontrado.</p>
             <Button variant="secondary" onClick={() => navigate("/laudos")} style={{ marginTop: "1rem" }}>
               Voltar para Laudos
             </Button>
@@ -76,14 +94,23 @@ export default function AssinaturaDigitalPage() {
     try {
       const today = new Date().toISOString().split("T")[0];
       
-      // Atualiza o status do laudo e do equipamento
-      update(equipamento.id, {
-        ...equipamento,
-        status: "ativo",
-        laudoAssinado: true,
-        statusLaudo: "assinado",
-        ultimaCalibracao: today,
-      });
+      if (isPadrao && padrao) {
+        const novos = padroes.map(p => p.id === padrao.id ? {
+          ...p,
+          laudoAssinado: true,
+          statusLaudo: "assinado" as const,
+        } : p);
+        storage.set("jq:padroes:v1", novos);
+        setPadroes(novos);
+      } else if (equipamento) {
+        update(equipamento.id, {
+          ...equipamento,
+          status: "ativo",
+          laudoAssinado: true,
+          statusLaudo: "assinado",
+          ultimaCalibracao: today,
+        });
+      }
 
       setSuccess(true);
       toast.success("Documento assinado digitalmente com sucesso via GOV.BR!");
@@ -110,7 +137,7 @@ export default function AssinaturaDigitalPage() {
             </div>
             <h2 className={styles.title}>Assinatura Concluída!</h2>
             <p className={styles.description}>
-              O laudo do equipamento <strong>{equipamento.tag}</strong> foi assinado digitalmente e já está disponível no sistema com validade legal.
+              O laudo do {isPadrao ? "padrão" : "equipamento"} <strong>{isPadrao ? (target as Padrao).codigo : (target as any).tag}</strong> foi assinado digitalmente e já está disponível no sistema com validade legal.
             </p>
             <Button
               variant="primary"
@@ -133,7 +160,7 @@ export default function AssinaturaDigitalPage() {
             <div className={styles.detailsBox}>
               <div className={styles.detailsTitle}>Detalhes do Documento</div>
               <div className={styles.detailsContent}>
-                <strong>Equipamento:</strong> {equipamento.tag} — {equipamento.nome} <br />
+                <strong>{isPadrao ? "Padrão" : "Equipamento"}:</strong> {isPadrao ? (target as Padrao).codigo : (target as any).tag} — {target.nome} <br />
                 <strong>Responsável Técnico:</strong> {user?.name} <br />
                 <strong>Emissão:</strong> {new Date().toLocaleDateString("pt-BR")}
               </div>

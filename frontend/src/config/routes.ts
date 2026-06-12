@@ -5,6 +5,7 @@ export const ROUTES = {
   resetPassword: "/redefinir-senha",
   dashboard: "/",
   equipamentos: "/equipamentos",
+  padroes: "/padroes",
   calibracao: "/calibracao",
   laudos: "/laudos",
   assinaturaDigital: "/assinatura-digital",

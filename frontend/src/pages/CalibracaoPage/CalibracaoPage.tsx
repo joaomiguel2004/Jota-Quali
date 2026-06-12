@@ -88,7 +88,7 @@ export default function CalibracaoPage() {
       update(toCalibrate.id, {
         nome: toCalibrate.nome,
         tag: toCalibrate.tag,
-        status: toCalibrate.status,
+        status: "calibracao",
         localizacao: toCalibrate.localizacao,
         ultimaCalibracao: toCalibrate.ultimaCalibracao,
         padrao: toCalibrate.padrao,
