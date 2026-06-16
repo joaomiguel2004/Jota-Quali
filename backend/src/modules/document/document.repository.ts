@@ -7,6 +7,7 @@ import { Documento } from "../../configs/documento.entity";
 import { AssinaturaDigital } from "../../configs/assinatura-digital.entity";
 import { Equipamento } from "../../configs/equipamento.entity";
 import { SolicitacaoCalibracao } from "../../configs/solicitacao-calibracao.entity";
+import { RecursoCalibracao } from "../../configs/recurso-calibracao.entity";
 
 export class DocumentRepository {
   private get em(): EntityManager {
@@ -101,6 +102,8 @@ export class DocumentRepository {
     const em = this.em;
     const doc = await em.findOne(Documento, { id });
     if (doc) {
+      await em.nativeDelete(AssinaturaDigital, { documento: id });
+      await em.nativeDelete(RecursoCalibracao, { documento: id });
       em.remove(doc);
       await em.flush();
     }

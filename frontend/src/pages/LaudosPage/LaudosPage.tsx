@@ -176,7 +176,7 @@ export default function LaudosPage() {
               onEdit={() => {}}
               onDelete={handleRemoverLaudo}
               mode="laudos"
-              onSign={user?.role === "Administrador" ? handleAssinarLaudo : undefined}
+              onSign={user?.role === "admin" ? handleAssinarLaudo : undefined}
             />
           )}
         </div>
