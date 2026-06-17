@@ -121,11 +121,6 @@ export default function LoginPage() {
           </Link>
         </p>
 
-        <div className={s.demoBox}>
-          <strong>Acesso demo:</strong> admin@jotaquali.com / admin123
-          <br />
-          tecnico@jotaquali.com / tecnico123
-        </div>
       </form>
     </AuthLayout>
   );

@@ -188,13 +188,3 @@
   font-size: var(--jq-fs-sm);
   color: var(--jq-text-muted);
 }
-.demoBox {
-  background: var(--jq-muted);
-  border: 1px dashed var(--jq-border-strong);
-  border-radius: var(--jq-radius-md);
-  padding: var(--jq-sp-3) var(--jq-sp-4);
-  font-size: var(--jq-fs-xs);
-  color: var(--jq-text-muted);
-  line-height: 1.55;
-}
-.demoBox strong { color: var(--jq-text-strong); }

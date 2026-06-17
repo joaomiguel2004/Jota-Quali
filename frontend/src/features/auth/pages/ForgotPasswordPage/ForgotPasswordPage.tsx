@@ -47,15 +47,7 @@ export default function ForgotPasswordPage() {
             Se o e-mail estiver cadastrado, você receberá um link para redefinir
             a senha em instantes.
           </Alert>
-          <Alert variant="info" title="Modo demo">
-            Use o link a seguir para concluir a redefinição:{" "}
-            <Link
-              to={`${ROUTES.resetPassword}?token=${sent.token}`}
-              className={s.linkBtn}
-            >
-              Abrir página de redefinição
-            </Link>
-          </Alert>
+
         </div>
       ) : (
         <form className={s.form} onSubmit={onSubmit} noValidate>
